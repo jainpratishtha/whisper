@@ -27,9 +27,17 @@ import logging
 import colorlog
 import progressbar
 
-import tensorflow as tf
+import string 
+import random 
+
+import tensorflow.compat.v1 as tf
+from tensorflow.python.framework import ops
+
+
+
 from sklearn.model_selection import train_test_split
 
+tf.disable_eager_execution()
 # Setting up progressbar and logger
 progressbar.streams.wrap_stderr()
 logger = colorlog.getLogger("ASSR")
@@ -102,7 +110,7 @@ class FeatureExtraction:
         plt.tight_layout()
     
     def extractrmse(self):
-        self.rmse = librosa.feature.rmse(y=self.y)
+        self.rmse = librosa.feature.rms(y=self.y)
 
 
 # In[ ]:
@@ -395,7 +403,8 @@ class NeuralNetwork:
             tfSessionsDir = "tfSessions"
             if not os.path.isdir(tfSessionsDir):
                 os.makedirs(tfSessionsDir)
-            timestamp = '{:%Y-%m-%d-%H:%M:%S}'.format(datetime.datetime.now()) + '-' + str(evalAccuracy)
+            timestamp = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 6))
+            timestamp = timestamp + " - " + str(evalAccuracy)
             os.makedirs(os.path.join(tfSessionsDir, timestamp))
             modelfilename =  os.path.join(os.path.join(tfSessionsDir, timestamp), 'session.ckpt')
             self.save_path = saver.save(sess, modelfilename)
@@ -583,7 +592,7 @@ def run(train=False, correct=False):
         dataset = Dataset('dataset', 'datasetLabels.txt', 'datasetArray80.gz')
         X_train, X_test, Y_train, Y_test = train_test_split(dataset.X, dataset.Y)
 
-        tf.reset_default_graph()
+        ops.reset_default_graph()
         nn = NeuralNetwork(X_train, Y_train, X_test, Y_test)
         nn.train()
 
