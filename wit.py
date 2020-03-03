@@ -7,7 +7,7 @@ def read_audio(WAVE_FILENAME):
     return audio
 def wit():
 	API_ENDPOINT = 'https://api.wit.ai/speech'
-	ACCESS_TOKEN = '45N5OTMTN3LKPDKOOYAYYABZKMARSYXP'
+	ACCESS_TOKEN = 'PQKOHMOHBQEJXP436J5RGXFXMBZTZGNF'
 
 	# get a sample of the audio that we recorded before. 
 	audio = read_audio("corrections/path-corrected.wav")

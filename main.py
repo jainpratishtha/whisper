@@ -16,12 +16,10 @@ def demo():
 def demofinal():
 	time.sleep(0.5)
 	if run.run():
-		
 		with open('text.json', 'r') as f:
     			distros_dict = json.load(f)
 		label = distros_dict['_text']
 		return render_template('index3.html', label=label)
-		
 		
 	else:
 		return "Nhi Huva!!"

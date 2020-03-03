@@ -86,8 +86,8 @@ class FeatureExtraction:
     
     def extractmfcc(self, n_mfcc=13):
         self.mfcc = librosa.feature.mfcc(S=self.log_S, n_mfcc=n_mfcc)
-        self.delta_mfcc = librosa.feature.delta(self.mfcc, width=3)
-        self.delta2_mfcc = librosa.feature.delta(self.mfcc, order=2, width=3)
+        self.delta_mfcc = librosa.feature.delta(self.mfcc, width=3 , mode="nearest")
+        self.delta2_mfcc = librosa.feature.delta(self.mfcc, order=2, width=3, mode="nearest")
         self.M = np.vstack([self.mfcc, self.delta_mfcc, self.delta2_mfcc])
     
     def plotmfcc(self):
@@ -603,13 +603,11 @@ def run(train=False, correct=False):
         else:
             tfSessionFile = 'tfSessions/2017-11-26-20:08:45-0.870725/session.ckpt'
 
-        correction = AudioCorrection(audiofile, tfSessionFile)
+        correction = AudioCorrection(s, tfSessionFile)
         correction.process()
         correction.saveCorrectedAudio()
 
-
 # In[ ]:
-
 
 if __name__ == "__main__":
     run(True, True)
